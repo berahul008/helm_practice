@@ -1,4 +1,18 @@
+# values.yaml
+namespace: prod
+
 deployment:
   name: test-data
   image: nginx
   replica: 2
+
+# Common labels you can override per environment
+labels:
+  app: test-data
+  tier: backend
+
+# Optional: labels specific to pods (merged on top of common labels)
+podLabels: {}
+
+# Optional: selector labels (defaults to app/name if not set)
+selectorLabels: {}

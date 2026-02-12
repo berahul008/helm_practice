@@ -1,23 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ include "myservice.name" . }}
+  namespace: {{ .Values.namespace | default "default" }}
   labels:
-    app: test-data
-  name: {{ .Values.deployment.name }}
-  namespace: prod
+    {{- include "myservice.commonLabels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.deployment.replica }}
+  replicas: {{ .Values.deployment.replica | default 1 }}
   selector:
     matchLabels:
-      app: test-data
+      {{- include "myservice.selectorLabels" . | nindent 6 }}
   strategy: {}
   template:
     metadata:
       labels:
-        app: test-data
+        {{- include "myservice.selectorLabels" . | nindent 8 }}
+        {{- with .Values.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       containers:
-      - image: {{ .Values.deployment.image }}
-        name: {{ .Values.deployment.image }}
-        resources: {}
-status: {}
+        - name: {{ include "myservice.name" . }}
+          image: {{ .Values.deployment.image }}
+          imagePullPolicy: IfNotPresent
+          resources: {}
