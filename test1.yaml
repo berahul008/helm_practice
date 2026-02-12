@@ -1,0 +1,4 @@
+deployment:
+  name: test-data
+  image: nginx
+  replica: 2
