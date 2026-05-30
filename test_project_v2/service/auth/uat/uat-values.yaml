@@ -1,0 +1,15 @@
+environment: uat
+serviceName: auth-service
+replicaCount: 3
+
+image:
+  repository: mycompany-registry/bank-auth
+  tag: v1.2.0
+
+containerPort: 8080
+
+env:
+  - name: DB_HOST
+    value: "auth-db.internal"
+  - name: LOG_LEVEL
+    value: "info"

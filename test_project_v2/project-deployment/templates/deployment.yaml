@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Dynamically names the deployment based on the release name or an override
+  name: {{ .Release.Name }}-{{ .Values.serviceName }}
+  labels:
+    app: {{ .Values.serviceName }}
+    environment: {{ .Values.environment }}
+spec:
+  # Dynamically set replica count
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ .Values.serviceName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.serviceName }}
+    spec:
+      containers:
+      - name: {{ .Values.serviceName }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+        ports:
+        - containerPort: {{ .Values.containerPort | default 80 }}
+        # Injecting dynamic environment variables if they exist
+        {{- if .Values.env }}
+        env:
+          {{- toYaml .Values.env | nindent 10 }}
+        {{- end }}

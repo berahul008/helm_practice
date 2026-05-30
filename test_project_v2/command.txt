@@ -1,0 +1,5 @@
+helm install auth-release ./project-deployment -f service-configs/auth-service-values.yaml --dry-run --debug
+
+helm install auth-release ./project-deployment -f service-configs/auth-service-values.yaml --namespace banking
+
+helm upgrade auth-release ./project-deployment -f service-configs/auth-service-values.yaml --namespace banking
