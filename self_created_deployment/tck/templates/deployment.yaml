@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ .Values.label.name }}
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.label.name }}
+    spec:
+      containers:
+      - image: {{ .Values.image.repository }}
+        name: {{ .Release.Name }}
